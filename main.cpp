@@ -19,27 +19,31 @@ int main()
     bool live=true;
     int blood=100;
     int heal=5;
+    int attackrange=4;
+    int maxattack=5;
     int bleeding=0;
     int xp=0;
     int maxxp=10;
     int lvl=0;
     int money=0;
     
+    bool war=true;
+    bool move=false;
     int i=0;
     int numberofenemies=0;//количество врагов
     int enemies;
+    bool enemieslive=true;
     
-    //rat
+    //rat 🐁
     int enemyrat=1;
     int attackRangeRat=10;
     int maxattackRat=10;//1-10
     int bloodRat=30;
-    //fatRat
+    //fatRat 🐀
     int enemyfatrat=2;
     int attackRangefatRat=5;
-    int maxattackfatRat=15;
+    int maxattackfatRat=15;//10-15
     int bloodfatRat=60;
-    
     
     while(live)
     {
@@ -74,14 +78,12 @@ int main()
                         battle=true;
                     }
                     
-                    
                 }
                 else
                 {
                     cout<<"error input"<<endl;
                 }
             }
-            
         }
         //clear cmd and konsole
         cout<<"battle "<<number<<endl;
@@ -147,21 +149,87 @@ int main()
                 }
                 
             }
-            for(int i=0;i<numberofenemies;0)
+            //начало цикла боя
+            while(war)
             {
-                print+=to_string(enemies[i*4])+"\n";
-                print+="attackRangefatRat:"+to_string(enemies[i*4+1])+"\n";
-                print+="maxattackfatRat:"+to_string(enemies[i*4+2])+"\n";
-                print+="bloodfatRat:"+to_string(enemies[i*4+3])+"\n";
-                i+=1;
-            }
-            cout<<print<<endl;
-            //сдесь должен быть бой
-            blood=0;
-            if(blood<=0)
-            {
-                live=false;
-                battle=false;
+                //test print
+                for(int i=0;i<numberofenemies;0)
+                {
+                    print+=to_string(enemies[i*4])+"\n";
+                    print+="attackRangefatRat:"+to_string(enemies[i*4+1])+"\n";
+                    print+="maxattackfatRat:"+to_string(enemies[i*4+2])+"\n";
+                    print+="bloodfatRat:"+to_string(enemies[i*4+3])+"\n";
+                    i+=1;
+                }
+                cout<<print<<endl;
+                print="";
+                //сдесь должен быть бой                                                                #здесь должны отображаться враги
+                cout<<"#############################################################\n o🐁\n/|\\\n ^\n/ \\\nYou blood:"<<blood<<"%\n#############################################################\n\tattack:"<<maxattack-attackrange<<"-"<<maxattack<<endl;
+                //проверка есть ли с кем  сражаться?
+                for(int i=0;i<numberofenemies;i+=1)
+                {
+                    if(enemies[i*4+3]>0)
+                    {
+                        move=true;
+                        enemies[i*4+3]-=10;
+                    }
+                    else
+                    {
+                        war=false;
+                    }
+                }
+                
+                while(move)
+                {
+                    blood=0;
+                    if(blood<=0)
+                    {
+                        live=false;
+                        battle=false;
+                        war=false;
+                    }
+                    else
+                    {
+                        cout<<"attack\nrun away\nheal"<<heal;
+                        cin>>input;
+                        if(input=="attack")
+                        {
+                            if(numberofenemies>1)
+                            {
+                                cout<<"who to hit?:";
+                                cin>>number;
+                            }
+                        }
+                        else
+                        {
+                            if(input=="run away")
+                            {
+                                battle=false;
+                                war=false;
+                            }
+                            else
+                            {
+                                if(input=="heal")
+                                {
+                                    if(heal>0)
+                                    {
+                                        //бинт останавливает кровотечерие
+                                        bleeding=0;
+                                        heal-=1;
+                                    }
+                                    else
+                                    {
+                                        cout<<"ran out of treatment items";//кончились предметы лечения
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    }
+                    //если у всех врагов кончилась кровь то бой закончен ==> war = false;
+                    //как сравнить неизвестное количество переменных в одном if???
+                    move=false;
+                }
             }
             delete[] enemies;
         }
